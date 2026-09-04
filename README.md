@@ -26,6 +26,15 @@ npm run dev
 npm run build
 ```
 
+### Codex Desktop
+
+このリポジトリをCodexのローカルプロジェクトとして開けば、そのまま開発できます。
+プロジェクト固有の作業方針と検証コマンドは `AGENTS.md` に記載しています。
+初回のみ `npm ci` を実行し、通常は `npm run dev` で開発サーバーを起動してください。
+
+環境変数は現在不要です。今後シークレットが必要になった場合は、Git管理対象外の
+`.env.local` に保存し、値を含まない `.env.example` へ変数名と用途を追記してください。
+
 ## Cloudflareへのデプロイ
 
 Cloudflare Workers & PagesでGitHubリポジトリを接続し、次を設定します。
@@ -45,3 +54,4 @@ Cloudflare Workers & PagesでGitHubリポジトリを接続し、次を設定し
 ## ライセンス
 
 店舗一覧の権利は提供元に帰属します。地図データは OpenStreetMap contributors の著作物です。
+
