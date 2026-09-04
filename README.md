@@ -45,3 +45,4 @@ Cloudflare Workers & PagesでGitHubリポジトリを接続し、次を設定し
 ## ライセンス
 
 店舗一覧の権利は提供元に帰属します。地図データは OpenStreetMap contributors の著作物です。
+
