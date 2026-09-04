@@ -19,9 +19,10 @@ export default function StoreMap(){
   const [mapReady,setMapReady]=useState(false);
   const [query,setQuery]=useState(""),[municipality,setMunicipality]=useState("すべての地域"),[selectedId,setSelectedId]=useState<number|null>(null);
   const [userPosition,setUserPosition]=useState<UserPosition|null>(null),[locating,setLocating]=useState(false),[locationError,setLocationError]=useState("");
-  const [favoritesOnly,setFavoritesOnly]=useState(false),[favorites,setFavorites]=useState<number[]>([]);
-
-  useEffect(()=>{try{const saved=JSON.parse(localStorage.getItem("kumamoto-store-favorites")??"[]");if(Array.isArray(saved))setFavorites(saved)}catch{}},[]);
+  const [favoritesOnly,setFavoritesOnly]=useState(false),[favorites,setFavorites]=useState<number[]>(()=>{
+    if(typeof window==="undefined")return [];
+    try{const saved=JSON.parse(localStorage.getItem("kumamoto-store-favorites")??"[]");return Array.isArray(saved)?saved:[]}catch{return []}
+  });
   const municipalities=useMemo(()=>Array.from(new Set(stores.map(s=>s.municipality))).sort((a,b)=>a.localeCompare(b,"ja")),[]);
   const filtered=useMemo(()=>{
     const needle=normalize(query),result=stores.filter(store=>(!needle||normalize(`${store.name}${store.address}`).includes(needle))&&(municipality==="すべての地域"||store.municipality===municipality)&&(!favoritesOnly||favorites.includes(store.id)));
