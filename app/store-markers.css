@@ -1,0 +1,64 @@
+.store-marker-shell {
+  background: transparent;
+  border: 0;
+}
+
+.store-marker {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: var(--coral);
+  color: #fff;
+  box-shadow: 0 2px 7px #17252266;
+  font-size: .7rem;
+  font-weight: 800;
+}
+
+.store-marker.selected { background: var(--teal); }
+
+.store-marker.multiple {
+  width: 30px;
+  height: 30px;
+  margin: -2px;
+  box-shadow: 0 0 0 3px #ef5b3f55, 0 2px 8px #17252277;
+}
+
+.store-marker.multiple.selected {
+  box-shadow: 0 0 0 3px #0b625e55, 0 2px 8px #17252277;
+}
+
+.pin-popup {
+  display: flex;
+  min-width: 190px;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.pin-popup > strong {
+  padding: 2px 3px 5px;
+  color: var(--teal);
+}
+
+.pin-popup-store {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+}
+
+.pin-popup-store:hover,
+.pin-popup-store:focus-visible { background: #eef5f3; }
+.pin-popup-store span { color: var(--muted); font-size: .75rem; }
+
+.pin-popup-multiple .pin-popup-store + .pin-popup-store {
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+}
