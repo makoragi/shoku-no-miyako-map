@@ -55,7 +55,7 @@ export default function StoreMap(){
   const selected=stores.find(s=>s.id===selectedId)??null;
 
   return <main className="app-shell">
-    <header className="topbar"><div className="brand-mark"><MapPin size={21} strokeWidth={2.5}/></div><div className="brand-copy"><h1>食のみやこ熊本券 <span>店舗マップ</span></h1><p><strong>非公式</strong>・2026年9月5日時点・全{stores.length}店舗</p></div><a className="source-link" href="https://www.kmmn-pay.jp/wp-content/uploads/kumamoto_store_list.pdf" target="_blank" rel="noreferrer">公式一覧 <ExternalLink size={14}/></a></header>
+    <header className="topbar"><div className="brand-mark"><MapPin size={21} strokeWidth={2.5}/></div><div className="brand-copy"><h1>食のみやこ熊本券 <span>店舗マップ</span></h1><p><strong>非公式</strong>・2026年8月31日時点・全{stores.length}店舗</p></div><a className="source-link" href="https://kumamoto-tabeteouen.com/" target="_blank" rel="noreferrer">公式一覧 <ExternalLink size={14}/></a></header>
     <section className="toolbar" aria-label="店舗を絞り込む">
       <label className="search-box"><Search size={19}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="店名・住所で検索" aria-label="店名・住所で検索"/>{query&&<button onClick={()=>setQuery("")} aria-label="検索をクリア"><X size={17}/></button>}</label>
       <label className="select-box"><ListFilter size={18}/><select value={municipality} onChange={e=>setMunicipality(e.target.value)} aria-label="地域で絞り込む"><option>すべての地域</option>{municipalities.map(name=><option key={name}>{name}</option>)}</select></label>

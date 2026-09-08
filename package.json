@@ -9,6 +9,7 @@
     "dev": "vite",
     "build": "vinext build",
     "start": "vinext start",
+    "check:stores": "node scripts/check-store-updates.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "deploy:staging": "npm run build && wrangler deploy --name shoku-no-miyako-map-staging --config dist/server/wrangler.json",
     "deploy:production": "npm run build && wrangler deploy --config dist/server/wrangler.json"
