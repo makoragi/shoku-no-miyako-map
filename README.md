@@ -55,3 +55,12 @@ Cloudflare Workers & PagesでGitHubリポジトリを接続し、次を設定し
 
 店舗一覧の権利は提供元に帰属します。地図データは OpenStreetMap contributors の著作物です。
 
+# 店舗一覧の更新確認
+
+公式Webサイトの6エリアを取得し、現在の `app/data/stores.json` と照合します。
+
+```bash
+npm run check:stores
+```
+
+このコマンドは、公式Webと現在データの基準日、エリア別件数、双方にのみ存在する店舗、同一住所の表記変更候補を表示します。公式Webの基準日が現在データより古い場合は警告を表示します。確認専用であり、`stores.json` は変更しません。
