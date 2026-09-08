@@ -47,6 +47,13 @@ export default function StoreMap(){
     });
     return()=>{cancelled=true;userMarker.current?.remove();mapRef.current?.remove();mapRef.current=null;storeLayer.current=null;leafletRef.current=null};
   },[]);
+  useEffect(()=>{
+    const mapElement=mapNode.current;
+    if(!mapElement)return;
+    const observer=new ResizeObserver(()=>mapRef.current?.invalidateSize());
+    observer.observe(mapElement);
+    return()=>observer.disconnect();
+  },[]);
   useEffect(()=>{const L=leafletRef.current?.default,layer=storeLayer.current;if(!L||!layer)return;layer.clearLayers();mappedStores.forEach(store=>{const popup=document.createElement("div");popup.className="pin-popup";const title=document.createElement("strong"),address=document.createElement("span");title.textContent=store.name;address.textContent=store.address;popup.append(title,address);L.circleMarker([store.lat,store.lng],{radius:10,color:"#fff",weight:3,fillColor:selectedId===store.id?"#0b625e":"#ef5b3f",fillOpacity:1,bubblingMouseEvents:false}).bindPopup(popup,{closeButton:true,autoPan:true,offset:[0,-7]}).on("click",event=>{setSelectedId(store.id);event.target.openPopup()}).addTo(layer)})},[mappedStores,selectedId,mapReady]);
 
   function selectStore(store:Store){setSelectedId(store.id);if(store.lat!=null&&store.lng!=null)mapRef.current?.flyTo([store.lat,store.lng],15,{duration:.7})}
