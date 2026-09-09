@@ -62,3 +62,9 @@
   border-top: 1px solid var(--line);
   border-radius: 0;
 }
+
+.store-marker.sep10-available { background: #16835f; }
+.store-marker.sep10-available:not(.multiple)::after { content: "✓"; font-size: 14px; font-weight: 900; }
+.store-marker.sep10-unlisted { background: #d28a24; }
+.pin-popup-store .popup-available { color: #08704f; font-weight: 700; }
+.pin-popup-store .popup-unlisted { color: #9a6114; font-weight: 700; }
