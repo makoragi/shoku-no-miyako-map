@@ -9,10 +9,11 @@
 /* 9月10日利用開始情報 */
 .app-shell{grid-template-rows:auto auto auto auto minmax(0,1fr) auto}
 .launch-banner{display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 18px;background:#e1f4ec;color:#0b625e;border-bottom:1px solid #b8ddcf;font-size:.82rem}.launch-banner svg{flex:0 0 auto}
-.toolbar{grid-template-columns:minmax(220px,1.5fr) minmax(180px,.8fr) auto auto auto}
-.sep10-filter.active{background:#e1f4ec;border-color:#7ec3a9;color:#086047}
+.toolbar{grid-template-columns:minmax(220px,1.5fr) minmax(170px,.7fr) minmax(170px,.7fr) auto auto}
+.source-links{margin-left:auto;display:flex;gap:9px}.source-links .source-link{margin-left:0}
+.launch-banner>span{display:flex;align-items:center;gap:10px}.launch-count{display:inline-flex;align-items:center;gap:5px;font-size:.75rem;font-weight:700}.launch-count::before{content:"";width:9px;height:9px;border-radius:50%}.sep10-dot::before{background:#16835f}.sep11-dot::before{background:#2768b2}
 .notice,.workspace,.app-shell>footer{grid-row:auto}
 .store-card h2{margin-top:5px}
-.availability-badge{width:max-content;display:flex;align-items:center;gap:4px;padding:3px 7px;border-radius:999px;font-size:.68rem;font-weight:750}.availability-badge.available{background:#dff3e9;color:#086047}.availability-badge.unlisted{background:#fff1dc;color:#8b5c19}
+.availability-badge{width:max-content;display:flex;align-items:center;gap:4px;padding:3px 7px;border-radius:999px;font-size:.68rem;font-weight:750}.availability-badge.sep10{background:#dff3e9;color:#086047}.availability-badge.sep11{background:#e5effb;color:#1e5c9e}.availability-badge.unlisted{background:#fff1dc;color:#8b5c19}
 .selected-place>p{margin-top:7px}
-@media(max-width:760px){.app-shell{grid-template-rows:auto}.launch-banner{justify-content:flex-start;padding:7px 12px;font-size:.72rem}.sep10-filter{grid-column:1/-1}.toolbar{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.app-shell{grid-template-rows:auto}.launch-banner{justify-content:flex-start;padding:7px 12px;font-size:.72rem}.launch-banner>span{align-items:flex-start;gap:3px;flex-wrap:wrap}.launch-banner strong{width:100%}.toolbar{grid-template-columns:1fr 1fr}.date-filter{grid-column:1/-1}.source-links{gap:6px}.source-links .source-link{font-size:.7rem}}
