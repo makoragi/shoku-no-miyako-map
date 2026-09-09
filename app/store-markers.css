@@ -62,3 +62,13 @@
   border-top: 1px solid var(--line);
   border-radius: 0;
 }
+
+.store-marker.availability-sep10 { background: #16835f; }
+.store-marker.availability-sep11 { background: #2768b2; }
+.store-marker.availability-sep10:not(.multiple)::after,
+.store-marker.availability-sep11:not(.multiple)::after { content: "✓"; font-size: 14px; font-weight: 900; }
+.store-marker.availability-unlisted { background: #d28a24; }
+.store-marker.availability-mixed { background: linear-gradient(135deg,#16835f 50%,#2768b2 50%); }
+.pin-popup-store .popup-sep10 { color: #08704f; font-weight: 700; }
+.pin-popup-store .popup-sep11 { color: #1e5c9e; font-weight: 700; }
+.pin-popup-store .popup-unlisted { color: #9a6114; font-weight: 700; }

@@ -7,9 +7,9 @@
 
 ## データ
 
-- 出典：[「食のみやこ熊本券」利用可能店舗一覧](https://www.kmmn-pay.jp/wp-content/uploads/kumamoto_store_list.pdf)
-- 2026年9月5日時点
-- 537店舗
+- 出典：[9月10日利用開始店舗](https://kumamoto-tabeteouen.com/images/store-0910.pdf)・[9月11日利用開始店舗](https://kumamoto-tabeteouen.com/images/store-0911.pdf)
+- 2026年9月9日確認
+- 1,188店舗（9月10日開始527店、9月11日開始660店、開始日未確認1店）
 
 ## 開発
 
