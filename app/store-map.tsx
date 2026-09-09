@@ -56,7 +56,8 @@ export default function StoreMap(){
       if(cancelled||!mapNode.current)return;
       const L=module.default;
       leafletRef.current=module;
-      const map=L.map(mapNode.current,{zoomControl:true,preferCanvas:true,tapTolerance:24}).setView([32.72,130.75],8);
+      const initialZoom=window.matchMedia("(max-width: 760px)").matches?8:9;
+      const map=L.map(mapNode.current,{zoomControl:true,preferCanvas:true,tapTolerance:24}).setView([32.72,130.75],initialZoom);
       L.tileLayer("https://tile.openstreetmap.jp/styles/osm-bright-ja/{z}/{x}/{y}.png",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> / <a href="https://tile.openstreetmap.jp/" target="_blank">OSMFJ</a>',maxZoom:18}).addTo(map);
       storeLayer.current=L.layerGroup().addTo(map);
       mapRef.current=map;
@@ -80,7 +81,7 @@ export default function StoreMap(){
   const selected=stores.find(s=>s.id===selectedId)??null;
 
   return <main className="app-shell">
-    <header className="topbar"><div className="brand-mark"><MapPin size={21} strokeWidth={2.5}/></div><div className="brand-copy"><h1>食のみやこ熊本券 <span>店舗マップ</span></h1><p><strong>非公式</strong>・利用開始日別 全{stores.length}店舗</p></div><nav className="source-links" aria-label="公式店舗一覧"><a className="source-link" href={sep10Availability.source} target="_blank" rel="noreferrer">9/10 <ExternalLink size={13}/></a><a className="source-link" href={sep11Availability.source} target="_blank" rel="noreferrer">9/11 <ExternalLink size={13}/></a></nav></header>
+    <header className="topbar"><div className="brand-mark"><MapPin size={21} strokeWidth={2.5}/></div><div className="brand-copy"><h1>食のみやこ熊本券 <span>店舗マップ</span></h1><p><strong>非公式</strong>・利用開始日別 全{stores.length}店舗</p></div><nav className="source-links" aria-label="公式情報"><a className="source-link" href="https://kumamoto-tabeteouen.com/" target="_blank" rel="noreferrer">公式サイト <ExternalLink size={13}/></a></nav></header>
     <div className="launch-banner"><CalendarCheck size={18}/><span><strong>利用開始日にご注意ください</strong><span className="launch-count sep10-dot">9/10開始 {sep10AvailableCount}店</span><span className="launch-count sep11-dot">9/11開始 {sep11AvailableCount}店</span></span></div>
     <section className="toolbar" aria-label="店舗を絞り込む">
       <label className="search-box"><Search size={19}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="店名・住所で検索" aria-label="店名・住所で検索"/>{query&&<button onClick={()=>setQuery("")} aria-label="検索をクリア"><X size={17}/></button>}</label>
