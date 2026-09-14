@@ -17,6 +17,6 @@
 .launch-banner>span{display:flex;align-items:center;gap:10px}.launch-count{display:inline-flex;align-items:center;gap:5px;font-size:.75rem;font-weight:700}.launch-count::before{content:"";width:9px;height:9px;border-radius:50%}.sep10-dot::before{background:#16835f}.sep11-dot::before{background:#2768b2}
 .notice{grid-row:4}.workspace{grid-row:5}.app-shell>footer{grid-row:6}
 .store-card h2{margin-top:5px}
-.availability-badge{width:max-content;display:flex;align-items:center;gap:4px;padding:3px 7px;border-radius:999px;font-size:.68rem;font-weight:750}.availability-badge.sep10{background:#dff3e9;color:#086047}.availability-badge.sep11{background:#e5effb;color:#1e5c9e}.availability-badge.unlisted{background:#fff1dc;color:#8b5c19}
+.availability-badge{width:max-content;display:flex;align-items:center;gap:4px;padding:3px 7px;border-radius:999px;font-size:.68rem;font-weight:750}.availability-badge.sep10{background:#dff3e9;color:#086047}.availability-badge.sep11{background:#e5effb;color:#1e5c9e}.availability-badge.sep14{background:#eee8fb;color:#6842a3}.availability-badge.ineligible{background:#f2e7e7;color:#984747}.availability-badge.unlisted{background:#fff1dc;color:#8b5c19}
 .selected-place>p{margin-top:7px}
 @media(max-width:760px){.app-shell{grid-template-rows:auto}.launch-banner{justify-content:flex-start;padding:7px 12px;font-size:.72rem}.launch-banner>span{align-items:flex-start;gap:3px;flex-wrap:wrap}.launch-banner strong{width:100%}.toolbar{grid-template-columns:1fr 1fr}.source-links{gap:6px}.source-links .source-link{font-size:.7rem}}
