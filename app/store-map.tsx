@@ -86,7 +86,7 @@ export default function StoreMap(){
   const selected=stores.find(s=>s.id===selectedId)??null;
 
   return <main className="app-shell">
-    <header className="topbar"><div className="brand-mark"><MapPin size={21} strokeWidth={2.5}/></div><div className="brand-copy"><h1>食のみやこ熊本券 <span>店舗マップ</span></h1><p><strong>非公式</strong>・9/18時点 対象{eligibleStoreCount}店舗</p></div><nav className="source-links" aria-label="公式情報"><a className="source-link" href="https://kumamoto-tabeteouen.com/images/store-0915.pdf" target="_blank" rel="noreferrer">9/18開始の公式一覧 <ExternalLink size={13}/></a></nav></header>
+    <header className="topbar"><div className="brand-mark"><MapPin size={21} strokeWidth={2.5}/></div><div className="brand-copy"><h1>食のみやこ熊本券 <span>店舗マップ</span></h1><p><strong>非公式</strong>・9/18時点 対象{eligibleStoreCount}店舗</p></div><nav className="source-links" aria-label="公式情報"><a className="source-link" href="https://kumamoto-tabeteouen.com/" target="_blank" rel="noreferrer">公式サイト <ExternalLink size={13}/></a></nav></header>
     <div className="launch-banner"><CalendarCheck size={18}/><span><strong>9/18開始の公式一覧を反映済みです</strong><span className="launch-count">9/18開始 {sep18Availability.storeCount}店</span><span className="launch-count">対象外 {ineligibleStoreCount}店</span></span></div>
     <section className="toolbar" aria-label="店舗を絞り込む">
       <label className="search-box"><Search size={19}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="店名・住所で検索" aria-label="店名・住所で検索"/>{query&&<button onClick={()=>setQuery("")} aria-label="検索をクリア"><X size={17}/></button>}</label>
