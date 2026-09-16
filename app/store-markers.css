@@ -19,6 +19,23 @@
 
 .store-marker.selected { background: var(--teal); }
 
+.store-cluster {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #0b625ee8;
+  color: #fff;
+  box-shadow: 0 0 0 5px #0b625e30, 0 3px 10px #17252266;
+  font-size: .78rem;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.store-cluster:hover,
+.store-cluster:focus-visible { background: var(--coral); transform: scale(1.06); }
+
 .store-marker.multiple {
   width: 30px;
   height: 30px;
