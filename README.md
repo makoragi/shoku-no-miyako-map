@@ -7,9 +7,9 @@
 
 ## データ
 
-- 出典：[9月10日利用開始店舗](https://kumamoto-tabeteouen.com/images/store-0910.pdf)・[9月11日利用開始店舗](https://kumamoto-tabeteouen.com/images/store-0911.pdf)・[9月14日版店舗一覧](https://kumamoto-tabeteouen.com/images/store-0914.pdf)・[9月18日利用開始店舗](https://kumamoto-tabeteouen.com/images/store-0915.pdf)
-- 2026年9月15日確認
-- 対象1,762店舗（9月18日開始599店を含む）
+- 出典：[9月10日利用開始店舗](https://kumamoto-tabeteouen.com/images/store-0910.pdf)・[9月11日利用開始店舗](https://kumamoto-tabeteouen.com/images/store-0911.pdf)・[9月14日版店舗一覧](https://kumamoto-tabeteouen.com/images/store-0914.pdf)・[9月16日版店舗一覧](https://kumamoto-tabeteouen.com/images/store-0916.pdf)・[9月18日利用開始店舗](https://kumamoto-tabeteouen.com/images/store-0915.pdf)
+- 2026年9月16日確認
+- 対象1,747店舗（9月16日時点1,148店、9月18日開始予定599店）
 
 ## 開発
 
