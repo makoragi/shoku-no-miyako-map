@@ -9,6 +9,7 @@ import storesData from "./data/stores.json";
 import sep10Availability from "./data/availability-2026-09-10.json";
 import sep11Availability from "./data/availability-2026-09-11.json";
 import sep14Availability from "./data/availability-2026-09-14.json";
+import sep16Availability from "./data/availability-2026-09-16.json";
 import sep18Availability from "./data/availability-2026-09-18.json";
 
 type Store = { id:number; name:string; address:string; municipality:string; lat:number|null; lng:number|null; matchedAddress:string; geocodeStatus:string };
@@ -20,7 +21,7 @@ type AvailabilityFilter = "all"|"2026-09-10"|"2026-09-11"|"2026-09-14"|"2026-09-
 const sep10UnlistedIds = new Set<number>(sep10Availability.unlistedStoreIds);
 const sep14NewIds = new Set<number>(sep14Availability.newStoreIds);
 const sep18ExistingIds = new Set<number>(sep18Availability.existingStoreIds);
-const ineligibleIds = new Set<number>(sep14Availability.ineligibleStoreIds);
+const ineligibleIds = new Set<number>(sep16Availability.ineligibleStoreIds);
 function availabilityFor(store:Store):Availability{if(sep18ExistingIds.has(store.id)||store.id>=sep18Availability.firstNewStoreId&&store.id<=sep18Availability.lastNewStoreId)return "2026-09-18";if(ineligibleIds.has(store.id))return "ineligible";if(sep14NewIds.has(store.id))return "2026-09-14";if(store.id>=sep11Availability.firstStoreId&&store.id<=sep11Availability.lastStoreId)return "2026-09-11";return sep10UnlistedIds.has(store.id)?null:"2026-09-10"}
 function availabilityLabel(store:Store){const value=availabilityFor(store);return value==="2026-09-10"?"9/10から利用可":value==="2026-09-11"?"9/11から利用可":value==="2026-09-14"?"9/14版で追加":value==="2026-09-18"?"9/18から利用可":value==="ineligible"?"利用対象外":"利用開始日未確認"}
 function availabilityClass(store:Store){const value=availabilityFor(store);return value==="2026-09-10"?"sep10":value==="2026-09-11"?"sep11":value==="2026-09-14"?"sep14":value==="2026-09-18"?"sep18":value==="ineligible"?"ineligible":"unlisted"}
@@ -127,8 +128,8 @@ export default function StoreMap(){
   const selected=stores.find(s=>s.id===selectedId)??null;
 
   return <main className="app-shell">
-    <header className="topbar"><div className="brand-mark"><MapPin size={21} strokeWidth={2.5}/></div><div className="brand-copy"><h1>食のみやこ熊本券 <span>店舗マップ</span></h1><p><strong>非公式</strong>・9/18時点 対象{eligibleStoreCount}店舗</p></div><nav className="source-links" aria-label="公式情報"><a className="source-link" href="https://kumamoto-tabeteouen.com/" target="_blank" rel="noreferrer">公式サイト <ExternalLink size={13}/></a></nav></header>
-    <div className="launch-banner"><CalendarCheck size={18}/><span><strong>9/18開始の公式一覧を反映済みです</strong><span className="launch-count">9/18開始 {sep18Availability.storeCount}店</span><span className="launch-count">対象外 {ineligibleStoreCount}店</span></span></div>
+    <header className="topbar"><div className="brand-mark"><MapPin size={21} strokeWidth={2.5}/></div><div className="brand-copy"><h1>食のみやこ熊本券 <span>店舗マップ</span></h1><p><strong>非公式</strong>・9/16時点＋9/18開始予定 対象{eligibleStoreCount}店舗</p></div><nav className="source-links" aria-label="公式情報"><a className="source-link" href="https://kumamoto-tabeteouen.com/images/store-0916.pdf" target="_blank" rel="noreferrer">公式一覧（9/16版） <ExternalLink size={13}/></a></nav></header>
+    <div className="launch-banner"><CalendarCheck size={18}/><span><strong>9/16版と9/18開始予定の公式一覧を反映済みです</strong><span className="launch-count">9/16時点 {sep16Availability.storeCount}店</span><span className="launch-count">9/18開始予定 {sep18Availability.storeCount}店</span><span className="launch-count">対象外 {ineligibleStoreCount}店</span></span></div>
     <section className="toolbar" aria-label="店舗を絞り込む">
       <label className="search-box"><Search size={19}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="店名・住所で検索" aria-label="店名・住所で検索"/>{query&&<button onClick={()=>setQuery("")} aria-label="検索をクリア"><X size={17}/></button>}</label>
       <label className="select-box"><ListFilter size={18}/><select value={municipality} onChange={e=>setMunicipality(e.target.value)} aria-label="地域で絞り込む"><option>すべての地域</option>{municipalities.map(name=><option key={name}>{name}</option>)}</select></label>
