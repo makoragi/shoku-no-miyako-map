@@ -30,6 +30,7 @@ export default function StoreMap(){
   const mapNode=useRef<HTMLDivElement>(null),mapRef=useRef<LeafletMap|null>(null),storeLayer=useRef<LayerGroup|null>(null),userMarker=useRef<CircleMarker|null>(null),leafletRef=useRef<typeof import("leaflet")|null>(null);
   const [mapReady,setMapReady]=useState(false);
   const [renderedPointCount,setRenderedPointCount]=useState(0);
+  const [visibleStoreIds,setVisibleStoreIds]=useState<Set<number>|null>(null);
   const [query,setQuery]=useState(""),[municipality,setMunicipality]=useState("すべての地域"),[selectedId,setSelectedId]=useState<number|null>(null),[availabilityFilter,setAvailabilityFilter]=useState<AvailabilityFilter>("all");
   const [userPosition,setUserPosition]=useState<UserPosition|null>(null),[locating,setLocating]=useState(false),[locationError,setLocationError]=useState("");
   const [favoritesOnly,setFavoritesOnly]=useState(false),[favorites,setFavorites]=useState<number[]>(()=>{
@@ -43,6 +44,7 @@ export default function StoreMap(){
     return result.toSorted((a,b)=>{if(a.lat==null||a.lng==null)return 1;if(b.lat==null||b.lng==null)return -1;return distanceKm(userPosition,{lat:a.lat,lng:a.lng})-distanceKm(userPosition,{lat:b.lat,lng:b.lng})});
   },[query,municipality,availabilityFilter,favoritesOnly,favorites,userPosition]);
   const mappedStores=useMemo(()=>filtered.filter((s):s is MappedStore=>s.lat!=null&&s.lng!=null),[filtered]);
+  const visibleStores=useMemo(()=>visibleStoreIds===null?filtered:filtered.filter(store=>visibleStoreIds.has(store.id)),[filtered,visibleStoreIds]);
   const storeGroups=useMemo(()=>{
     const groups=new Map<string,MappedStore[]>();
     mappedStores.forEach(store=>{const key=coordinateKey(store),group=groups.get(key);if(group)group.push(store);else groups.set(key,[store])});
@@ -81,7 +83,8 @@ export default function StoreMap(){
       cancelAnimationFrame(frame);
       frame=requestAnimationFrame(()=>{
         layer.clearLayers();
-        const zoom=map.getZoom(),bounds=map.getBounds().pad(.25),cellSize=zoom>=14?1:zoom>=12?54:zoom>=10?68:82;
+        const zoom=map.getZoom(),visibleBounds=map.getBounds(),bounds=visibleBounds.pad(.25),cellSize=zoom>=14?1:zoom>=12?54:zoom>=10?68:82;
+        setVisibleStoreIds(new Set(mappedStores.filter(store=>visibleBounds.contains([store.lat,store.lng])).map(store=>store.id)));
         const buckets=new Map<string,{stores:MappedStore[];latSum:number;lngSum:number}>();
         storeGroups.forEach(group=>{
           const first=group[0];
@@ -113,7 +116,7 @@ export default function StoreMap(){
     draw();
     map.on("moveend zoomend",draw);
     return()=>{cancelAnimationFrame(frame);map.off("moveend zoomend",draw)};
-  },[storeGroups,selectedId,mapReady]);
+  },[storeGroups,mappedStores,selectedId,mapReady]);
 
   function selectStore(store:Store){setSelectedId(store.id);if(store.lat!=null&&store.lng!=null)mapRef.current?.flyTo([store.lat,store.lng],15,{duration:.7})}
   function locate(){setLocating(true);setLocationError("");navigator.geolocation.getCurrentPosition(({coords})=>{const point={lat:coords.latitude,lng:coords.longitude},L=leafletRef.current?.default;setUserPosition(point);setLocating(false);userMarker.current?.remove();if(L&&mapRef.current)userMarker.current=L.circleMarker([point.lat,point.lng],{radius:8,color:"#fff",weight:4,fillColor:"#1677e8",fillOpacity:1}).addTo(mapRef.current);mapRef.current?.flyTo([point.lat,point.lng],13,{duration:.7})},()=>{setLocating(false);setLocationError("現在地を取得できませんでした。端末の位置情報設定をご確認ください。")},{enableHighAccuracy:true,timeout:10000})}
@@ -132,8 +135,8 @@ export default function StoreMap(){
     </section>
     {locationError&&<div className="notice" role="alert">{locationError}<button onClick={()=>setLocationError("")} aria-label="閉じる"><X size={16}/></button></div>}
     <div className="workspace">
-      <section className="results-panel" aria-label="店舗一覧"><div className="results-summary"><strong>{filtered.length}店</strong><span>{userPosition?"現在地から近い順":"見つかりました"}</span></div><div className="store-list">
-        {filtered.length===0?<div className="empty-state"><Search size={27}/><strong>該当する店舗がありません</strong><span>検索条件を変えてお試しください。</span></div>:filtered.map(store=>{const isFavorite=favorites.includes(store.id),distance=userPosition&&store.lat!=null&&store.lng!=null?distanceKm(userPosition,{lat:store.lat,lng:store.lng}):null;return <article key={store.id} className={`store-card ${selectedId===store.id?"selected":""}`} onClick={()=>selectStore(store)}><div className="store-card-main"><div className={`availability-badge ${availabilityClass(store)}`}><CalendarCheck size={13}/>{availabilityLabel(store)}</div><h2>{store.name}</h2><p><MapPin size={15}/>{store.address}</p><div className="store-meta"><span>{store.municipality}</span>{distance!=null&&<span>{distance<1?`${Math.round(distance*1000)}m`:`${distance.toFixed(1)}km`}</span>}{store.lat==null&&<span className="unmapped">地図位置未確認</span>}</div></div><button className="heart-button" onClick={e=>{e.stopPropagation();toggleFavorite(store.id)}} aria-label={isFavorite?`${store.name}をお気に入りから削除`:`${store.name}をお気に入りに追加`}><Heart size={20} fill={isFavorite?"currentColor":"none"}/></button></article>})}
+      <section className="results-panel" aria-label="地図の表示範囲内の店舗一覧"><div className="results-summary"><strong>{visibleStores.length}店</strong><span>地図の表示範囲内{userPosition?"・現在地から近い順":""}</span></div><div className="store-list" aria-live="polite">
+        {visibleStores.length===0?<div className="empty-state"><Search size={27}/><strong>表示範囲内に店舗がありません</strong><span>{filtered.length===0?"検索条件を変えてお試しください。":"地図を移動するか、縮小してお試しください。"}</span></div>:visibleStores.map(store=>{const isFavorite=favorites.includes(store.id),distance=userPosition&&store.lat!=null&&store.lng!=null?distanceKm(userPosition,{lat:store.lat,lng:store.lng}):null;return <article key={store.id} className={`store-card ${selectedId===store.id?"selected":""}`} onClick={()=>selectStore(store)}><div className="store-card-main"><div className={`availability-badge ${availabilityClass(store)}`}><CalendarCheck size={13}/>{availabilityLabel(store)}</div><h2>{store.name}</h2><p><MapPin size={15}/>{store.address}</p><div className="store-meta"><span>{store.municipality}</span>{distance!=null&&<span>{distance<1?`${Math.round(distance*1000)}m`:`${distance.toFixed(1)}km`}</span>}{store.lat==null&&<span className="unmapped">地図位置未確認</span>}</div></div><button className="heart-button" onClick={e=>{e.stopPropagation();toggleFavorite(store.id)}} aria-label={isFavorite?`${store.name}をお気に入りから削除`:`${store.name}をお気に入りに追加`}><Heart size={20} fill={isFavorite?"currentColor":"none"}/></button></article>})}
       </div></section>
       <section className="map-panel" aria-label="店舗地図"><div ref={mapNode} className="map"/><div className="unofficial-badge">非公式マップ</div><button className="map-location-button" onClick={locate} aria-label="現在地を表示"><Crosshair size={20}/></button><div className="map-count">対象 <strong>{mappedStores.length}</strong> 店舗・地図上 {renderedPointCount}件</div>{selected&&<aside className="selected-place"><button className="close-card" onClick={()=>setSelectedId(null)} aria-label="店舗情報を閉じる"><X size={18}/></button><div className={`availability-badge ${availabilityClass(selected)}`}><CalendarCheck size={13}/>{availabilityLabel(selected)}</div><p>{selected.municipality}</p><h2>{selected.name}</h2><address>{selected.address}</address><div className="place-actions"><button onClick={()=>toggleFavorite(selected.id)}><Heart size={17} fill={favorites.includes(selected.id)?"currentColor":"none"}/>保存</button><a href={navigationUrl(selected)} target="_blank" rel="noreferrer">経路案内 <ExternalLink size={15}/></a></div></aside>}</section>
     </div>
