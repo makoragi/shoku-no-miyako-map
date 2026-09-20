@@ -107,7 +107,8 @@ export default function StoreMap(){
           popup.className=`pin-popup ${isMultiple?"pin-popup-multiple":""}`;
           if(isMultiple){const heading=document.createElement("strong");heading.textContent=`この地点の店舗（${group.length}店）`;popup.append(heading)}
           group.forEach(store=>{const item=document.createElement("button"),title=document.createElement("strong"),address=document.createElement("span"),availability=document.createElement("span");item.type="button";item.className="pin-popup-store";title.textContent=store.name;address.textContent=store.address;availability.className=`popup-${availabilityClass(store)}`;availability.textContent=availabilityLabel(store);item.append(title,address,availability);item.addEventListener("click",()=>setSelectedId(store.id));popup.append(item)});
-          const marker=L.marker([first.lat,first.lng],{icon:L.divIcon({className:"store-marker-shell",html:`<span class="store-marker ${isSelected?"selected":""} ${isMultiple?"multiple":""} availability-${markerStatus}">${isMultiple?group.length:""}</span>`,iconSize:[26,26],iconAnchor:[13,13],popupAnchor:[0,-13]}),bubblingMouseEvents:false}).bindPopup(popup,{closeButton:true,autoPan:true});
+          const mapSize=map.getSize(),popupMaxHeight=Math.max(150,Math.min(360,mapSize.y-80)),popupMaxWidth=Math.max(220,Math.min(360,mapSize.x-40));
+          const marker=L.marker([first.lat,first.lng],{icon:L.divIcon({className:"store-marker-shell",html:`<span class="store-marker ${isSelected?"selected":""} ${isMultiple?"multiple":""} availability-${markerStatus}">${isMultiple?group.length:""}</span>`,iconSize:[26,26],iconAnchor:[13,13],popupAnchor:[0,-13]}),bubblingMouseEvents:false}).bindPopup(popup,{closeButton:true,autoPan:false,maxHeight:popupMaxHeight,maxWidth:popupMaxWidth,minWidth:190});
           marker.on("click",()=>{if(!isMultiple)setSelectedId(first.id)}).addTo(layer);
         });
         setRenderedPointCount(buckets.size);
