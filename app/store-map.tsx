@@ -60,7 +60,7 @@ export default function StoreMap(){
       leafletRef.current=module;
       const initialZoom=window.matchMedia("(max-width: 760px)").matches?8:9;
       const map=L.map(mapNode.current,{zoomControl:true,preferCanvas:true,tapTolerance:24}).setView([32.72,130.75],initialZoom);
-      L.tileLayer("https://tile.openstreetmap.jp/styles/osm-bright-ja/{z}/{x}/{y}.png",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> / <a href="https://tile.openstreetmap.jp/" target="_blank">OSMFJ</a>',maxZoom:18}).addTo(map);
+      L.tileLayer("https://tile.openstreetmap.jp/styles/osm-bright-ja/{z}/{x}/{y}.png",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> / <a href="https://tile.openstreetmap.jp/" target="_blank">OSMFJ</a>',maxNativeZoom:18,maxZoom:20}).addTo(map);
       storeLayer.current=L.layerGroup().addTo(map);
       mapRef.current=map;
       setMapReady(true);
