@@ -7,18 +7,21 @@ import "./store-markers.css";
 import { CalendarCheck, Crosshair, ExternalLink, Heart, ListFilter, LocateFixed, MapPin, Search, X } from "lucide-react";
 import storesData from "./data/stores.json";
 import sep25Availability from "./data/availability-2026-09-25.json";
+import sep30Availability from "./data/availability-2026-09-30.json";
 
 type Store = { id:number; name:string; address:string; municipality:string; lat:number|null; lng:number|null; matchedAddress:string; geocodeStatus:string };
 type UserPosition = { lat:number; lng:number };
 type MappedStore = Store&{lat:number;lng:number};
 const stores = storesData as Store[];
-type Availability = "current"|"past";
+type Availability = "current"|"upcoming"|"past";
 type AvailabilityFilter = "all"|Availability;
 const pastStoreIds = new Set<number>(sep25Availability.pastStoreIds);
-function availabilityFor(store:Store):Availability{return pastStoreIds.has(store.id)?"past":"current"}
-function availabilityLabel(store:Store){return availabilityFor(store)==="current"?"9/25時点で掲載":"過去の一覧に掲載"}
-function availabilityClass(store:Store){return availabilityFor(store)==="current"?"sep18":"ineligible"}
+const upcomingStoreIds = new Set<number>(sep30Availability.scheduledStoreIds);
+function availabilityFor(store:Store):Availability{return upcomingStoreIds.has(store.id)?"upcoming":pastStoreIds.has(store.id)?"past":"current"}
+function availabilityLabel(store:Store){const availability=availabilityFor(store);return availability==="upcoming"?"9/30開始予定":availability==="current"?"9/25時点で掲載":"過去の一覧に掲載"}
+function availabilityClass(store:Store){const availability=availabilityFor(store);return availability==="upcoming"?"upcoming":availability==="current"?"sep18":"ineligible"}
 const eligibleStoreCount = sep25Availability.storeCount;
+const upcomingStoreCount = sep30Availability.storeCount;
 const pastStoreCount = stores.filter((store)=>availabilityFor(store)==="past").length;
 
 function distanceKm(a:UserPosition,b:UserPosition){const r=6371,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180,v=Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;return r*2*Math.atan2(Math.sqrt(v),Math.sqrt(1-v))}
@@ -125,12 +128,12 @@ export default function StoreMap(){
   const selected=stores.find(s=>s.id===selectedId)??null;
 
   return <main className="app-shell">
-    <header className="topbar"><div className="brand-mark"><MapPin size={21} strokeWidth={2.5}/></div><div className="brand-copy"><h1>食のみやこ熊本券 <span>店舗マップ</span></h1><p><strong>非公式</strong>・9/25時点の掲載{eligibleStoreCount}店舗</p></div><nav className="source-links" aria-label="公式情報"><a className="source-link" href="https://kumamoto-tabeteouen.com/" target="_blank" rel="noreferrer">公式サイト <ExternalLink size={13}/></a></nav></header>
-    <div className="launch-banner"><CalendarCheck size={18}/><span><strong>9/25時点の公式一覧を反映済みです</strong><span className="launch-count">現在掲載 {sep25Availability.storeCount}店</span><span className="launch-count">過去掲載 {pastStoreCount}店</span></span></div>
+    <header className="topbar"><div className="brand-mark"><MapPin size={21} strokeWidth={2.5}/></div><div className="brand-copy"><h1>食のみやこ熊本券 <span>店舗マップ</span></h1><p><strong>非公式</strong>・9/25掲載{eligibleStoreCount}店舗＋9/30開始予定{upcomingStoreCount}店舗</p></div><nav className="source-links" aria-label="公式情報"><a className="source-link" href="https://kumamoto-tabeteouen.com/" target="_blank" rel="noreferrer">公式サイト <ExternalLink size={13}/></a></nav></header>
+    <div className="launch-banner"><CalendarCheck size={18}/><span><strong>9/30開始予定の公式一覧を反映済みです</strong><span className="launch-count">9/25掲載 {eligibleStoreCount}店</span><span className="launch-count">9/30開始予定 {upcomingStoreCount}店</span><span className="launch-count">過去掲載 {pastStoreCount}店</span></span></div>
     <section className="toolbar" aria-label="店舗を絞り込む">
       <label className="search-box"><Search size={19}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="店名・住所で検索" aria-label="店名・住所で検索"/>{query&&<button onClick={()=>setQuery("")} aria-label="検索をクリア"><X size={17}/></button>}</label>
       <label className="select-box"><ListFilter size={18}/><select value={municipality} onChange={e=>setMunicipality(e.target.value)} aria-label="地域で絞り込む"><option>すべての地域</option>{municipalities.map(name=><option key={name}>{name}</option>)}</select></label>
-      <label className="select-box date-filter"><CalendarCheck size={18}/><select value={availabilityFilter} onChange={e=>setAvailabilityFilter(e.target.value as AvailabilityFilter)} aria-label="掲載状況で絞り込む"><option value="all">現在の掲載店舗</option><option value="current">9/25時点で掲載</option><option value="past">過去の一覧に掲載</option></select></label>
+      <label className="select-box date-filter"><CalendarCheck size={18}/><select value={availabilityFilter} onChange={e=>setAvailabilityFilter(e.target.value as AvailabilityFilter)} aria-label="掲載状況で絞り込む"><option value="all">現在・開始予定の店舗</option><option value="current">9/25時点で掲載</option><option value="upcoming">9/30開始予定</option><option value="past">過去の一覧に掲載</option></select></label>
       <button className={`filter-button ${favoritesOnly?"active":""}`} onClick={()=>setFavoritesOnly(v=>!v)} aria-pressed={favoritesOnly}><Heart size={18} fill={favoritesOnly?"currentColor":"none"}/>お気に入り</button>
       <button className="location-button" onClick={locate} disabled={locating}><LocateFixed size={18}/>{locating?"取得中…":"現在地"}</button>
     </section>
