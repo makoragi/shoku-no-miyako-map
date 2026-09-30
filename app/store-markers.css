@@ -89,7 +89,7 @@
 .store-marker.availability-sep11:not(.multiple)::after,
 .store-marker.availability-sep14:not(.multiple)::after,
 .store-marker.availability-sep18:not(.multiple)::after { content: "✓"; font-size: 14px; font-weight: 900; }
-.store-marker.availability-upcoming:not(.multiple)::after { content: "9/30"; font-size: 8px; font-weight: 900; }
+.store-marker.availability-upcoming:not(.multiple)::after { content: "10/2"; font-size: 8px; font-weight: 900; }
 .store-marker.availability-ineligible { background: #a35b5b; }
 .store-marker.availability-unlisted { background: #d28a24; }
 .store-marker.availability-mixed { background: linear-gradient(135deg,#16835f 50%,#2768b2 50%); }
